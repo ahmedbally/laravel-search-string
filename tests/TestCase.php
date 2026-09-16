@@ -16,6 +16,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('database.default', 'mysql');
         $app['config']->set('search-string', include __DIR__ . '/../src/config.php');
     }
 
@@ -27,7 +28,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             protected $table = 'models';
             protected $options = [];
 
-            public function __construct($options)
+            public function __construct($options = [])
             {
                 parent::__construct();
                 $this->options = $options;

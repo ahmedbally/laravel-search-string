@@ -6,6 +6,8 @@ use Lorisleiva\LaravelSearchString\Visitors\AttachRulesVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\IdentifyRelationshipsFromRulesVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\InlineDumpVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\RemoveNotSymbolVisitor;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class VisitorIdentifyRelationshipsFromRulesTest extends VisitorTest
 {
@@ -19,7 +21,7 @@ class VisitorIdentifyRelationshipsFromRulesTest extends VisitorTest
         ];
     }
 
-    public function success()
+    public static function success()
     {
         return [
             // It recognises solo symbols.
@@ -66,12 +68,8 @@ class VisitorIdentifyRelationshipsFromRulesTest extends VisitorTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider success
-     * @param $input
-     * @param $expected
-     */
+    #[Test]
+    #[DataProvider('success')]
     public function visitor_identify_relationships_from_rules_success($input, $expected)
     {
         $this->assertAstEquals($input, $expected);

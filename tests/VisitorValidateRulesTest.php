@@ -6,6 +6,8 @@ use Lorisleiva\LaravelSearchString\Exceptions\InvalidSearchStringException;
 use Lorisleiva\LaravelSearchString\Visitors\AttachRulesVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\IdentifyRelationshipsFromRulesVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\ValidateRulesVisitor;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class VisitorValidateRulesTest extends VisitorTest
 {
@@ -18,7 +20,7 @@ class VisitorValidateRulesTest extends VisitorTest
         ];
     }
 
-    public function failure()
+    public static function failure()
     {
         return [
             // QuerySymbol.
@@ -42,11 +44,8 @@ class VisitorValidateRulesTest extends VisitorTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider failure
-     * @param $input
-     */
+    #[Test]
+    #[DataProvider('failure')]
     public function visitor_validate_rules_failure($input)
     {
         $this->expectException(InvalidSearchStringException::class);

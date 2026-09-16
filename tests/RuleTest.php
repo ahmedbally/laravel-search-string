@@ -3,10 +3,11 @@
 namespace Lorisleiva\LaravelSearchString\Tests;
 
 use Lorisleiva\LaravelSearchString\Options\Rule;
+use PHPUnit\Framework\Attributes\Test;
 
 class RuleTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_keep_rules_that_are_defined_has_regex_patterns()
     {
         $this->assertEquals("[/^foobar$/]", $this->parseRule('/^foobar$/'));
@@ -14,13 +15,13 @@ class RuleTest extends TestCase
         $this->assertEquals("[/^(published|live)$/]", $this->parseRule('/^(published|live)$/'));
     }
 
-    /** @test */
+    #[Test]
     public function it_wraps_non_regex_patterns_into_regex_delimiters()
     {
         $this->assertEquals("[/^foobar$/]", $this->parseRule('foobar'));
     }
 
-    /** @test */
+    #[Test]
     public function it_preg_quote_non_regex_patterns()
     {
         $this->assertEquals('[/^\/ke\(y$/]', $this->parseRule('/ke(y'));
@@ -28,14 +29,14 @@ class RuleTest extends TestCase
         $this->assertEquals('[/^\.\*\\\w\(value$/]', $this->parseRule('.*\w(value'));
     }
 
-    /** @test */
+    #[Test]
     public function it_provides_fallback_values_when_patterns_are_missing()
     {
         $this->assertEquals('[/^fallback_column$/]', $this->parseRule(null, 'fallback_column'));
         $this->assertEquals('[/^fallback_column$/]', $this->parseRule([], 'fallback_column'));
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_string_rules_as_the_key_of_the_rule()
     {
         $this->assertEquals("[/^foobar$/]", $this->parseRule('foobar'));

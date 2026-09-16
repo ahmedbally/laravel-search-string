@@ -4,6 +4,8 @@ namespace Lorisleiva\LaravelSearchString\Tests;
 
 use Lorisleiva\LaravelSearchString\Visitors\InlineDumpVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\RemoveNotSymbolVisitor;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @see RemoveNotSymbolVisitor
@@ -18,7 +20,7 @@ class VisitorRemoveNotSymbolTest extends VisitorTest
         ];
     }
 
-    public function success()
+    public static function success()
     {
         return [
             // Negate query symbols.
@@ -74,12 +76,8 @@ class VisitorRemoveNotSymbolTest extends VisitorTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider success
-     * @param $input
-     * @param $expected
-     */
+    #[Test]
+    #[DataProvider('success')]
     public function visitor_remove_not_symbol_success($input, $expected)
     {
         $this->assertAstEquals($input, $expected);

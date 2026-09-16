@@ -6,12 +6,14 @@ use Lorisleiva\LaravelSearchString\Exceptions\InvalidSearchStringException;
 use Lorisleiva\LaravelSearchString\Tests\Concerns\DumpsSql;
 use Lorisleiva\LaravelSearchString\Tests\Stubs\Product;
 use Lorisleiva\LaravelSearchString\Tests\Stubs\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class CreateBuilderTest extends TestCase
 {
     use DumpsSql;
 
-    public function success()
+    public static function success()
     {
         return [
             // It does not filter anything by default.
@@ -68,7 +70,7 @@ class CreateBuilderTest extends TestCase
         ];
     }
 
-    public function successWhereOnly()
+    public static function successWhereOnly()
     {
         $tomorrowStart = now()->addDay()->startOfDay();
         $tomorrowEnd = now()->addDay()->endOfDay();
@@ -209,7 +211,7 @@ class CreateBuilderTest extends TestCase
         ];
     }
 
-    public function expectInvalidSearchStringException()
+    public static function expectInvalidSearchStringException()
     {
         return [
             'Limit should be a positive integer' => ['limit:-1'],
@@ -220,7 +222,7 @@ class CreateBuilderTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_the_real_column_name_when_using_an_alias()
     {
         $model = $this->getModelWithColumns([
@@ -239,7 +241,7 @@ class CreateBuilderTest extends TestCase
         $this->assertWhereSqlEquals('not active', "models.activated = false", $model);
     }
 
-    /** @test */
+    #[Test]
     public function is_does_not_prefix_the_column_table_when_it_already_is_prefixed()
     {
         $model = $this->getModelWithColumns([
@@ -249,33 +251,22 @@ class CreateBuilderTest extends TestCase
         $this->assertWhereSqlEquals('postcode:1028', "my_model_table.zipcode = 1028", $model);
     }
 
-    /**
-     * @test
-     * @dataProvider success
-     * @param string $input
-     * @param string $expected
-     */
+    #[Test]
+    #[DataProvider('success')]
     public function create_builder_success(string $input, string $expected)
     {
         $this->assertSqlEquals($input, $expected);
     }
 
-    /**
-     * @test
-     * @dataProvider successWhereOnly
-     * @param string $input
-     * @param string $expected
-     */
+    #[Test]
+    #[DataProvider('successWhereOnly')]
     public function create_builder_success_where_only(string $input, string $expected)
     {
         $this->assertWhereSqlEquals($input, $expected);
     }
 
-    /**
-     * @test
-     * @dataProvider expectInvalidSearchStringException
-     * @param string $input
-     */
+    #[Test]
+    #[DataProvider('expectInvalidSearchStringException')]
     public function create_builder_expect_exception(string $input)
     {
         config()->set('search-string.fail', 'exceptions');

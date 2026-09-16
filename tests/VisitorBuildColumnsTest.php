@@ -7,6 +7,7 @@ use Lorisleiva\LaravelSearchString\Tests\Concerns\GeneratesEloquentBuilder;
 use Lorisleiva\LaravelSearchString\Visitors\AttachRulesVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\BuildColumnsVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\RemoveNotSymbolVisitor;
+use PHPUnit\Framework\Attributes\Test;
 
 class VisitorBuildColumnsTest extends VisitorTest
 {
@@ -21,7 +22,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ];
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_basic_where_clauses_that_match_the_query_operator()
     {
         $this->assertWhereClauses('name:1', ['Basic[and][0]' => 'products.name = 1']);
@@ -45,7 +46,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         $this->assertWhereClauses('not boolean_variable', ['Basic[and][0]' => 'products.boolean_variable = false']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_in_and_not_in_where_clauses()
     {
         $this->assertWhereClauses('name in (1,2,3)', ['In[and][0]' => 'products.name [1, 2, 3]']);
@@ -54,7 +55,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         $this->assertWhereClauses('not name:1,2,3', ['NotIn[and][0]' => 'products.name [1, 2, 3]']);
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_where_clauses_from_aliased_columned_using_the_real_column_name()
     {
         $model = $this->getModelWithColumns([
@@ -75,7 +76,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         $this->assertWhereClauses('not active', ['Basic[and][0]' => 'models.activated = false'], $model);
     }
 
-    /** @test */
+    #[Test]
     public function it_searches_using_like_where_clauses()
     {
         $this->assertWhereClauses('foobar', [
@@ -93,7 +94,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_searches_using_case_insensitive_like_where_clauses()
     {
         $model = $this->getModelWithOptions([
@@ -119,7 +120,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ], $model);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_add_where_clause_if_no_searchable_columns_were_given()
     {
         $model = $this->getModelWithOptions([]);
@@ -128,7 +129,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         $this->assertWhereClauses('not foobar', [], $model);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_nest_where_clauses_if_only_one_searchable_columns_is_given()
     {
         $model = $this->getModelWithColumns([
@@ -144,7 +145,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ], $model);
     }
 
-    /** @test */
+    #[Test]
     public function it_wraps_basic_queries_in_nested_and_or_where_clauses()
     {
         $this->assertWhereClauses('name:1 and price>1', [
@@ -162,7 +163,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_wraps_search_queries_in_nested_and_or_where_clauses()
     {
         $this->assertWhereClauses('foo and bar', [
@@ -205,7 +206,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_wraps_complex_and_or_operators_in_nested_where_clauses()
     {
         $this->assertWhereClauses('name:4 or (name:1 or name:2) and price>1 or name:3', [
@@ -223,7 +224,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_updates_query_values_according_to_the_rules_map()
     {
         $model = $this->getModelWithColumns([
@@ -242,7 +243,7 @@ class VisitorBuildColumnsTest extends VisitorTest
         $this->assertWhereClauses('support_level:official', ['Basic[and][0]' => 'models.support_level_id = 3'], $model);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_update_query_values_if_the_rule_mapping_is_missing()
     {
         $model = $this->getModelWithColumns([

@@ -4,12 +4,13 @@ namespace Lorisleiva\LaravelSearchString\Tests;
 
 use Lorisleiva\LaravelSearchString\Exceptions\InvalidSearchStringException;
 use Lorisleiva\LaravelSearchString\Tests\Concerns\DumpsSql;
+use PHPUnit\Framework\Attributes\Test;
 
 class ErrorHandlingStrategiesTest extends TestCase
 {
     use DumpsSql;
 
-    /** @test */
+    #[Test]
     public function exceptions_strategy_throws_on_lexer_error()
     {
         $this->setStrategy('exceptions');
@@ -17,7 +18,7 @@ class ErrorHandlingStrategiesTest extends TestCase
         $this->build('Hello "');
     }
 
-    /** @test */
+    #[Test]
     public function exceptions_strategy_throws_on_parser_error()
     {
         $this->setStrategy('exceptions');
@@ -25,7 +26,7 @@ class ErrorHandlingStrategiesTest extends TestCase
         $this->build('parser error in in');
     }
 
-    /** @test */
+    #[Test]
     public function exceptions_strategy_throws_on_unmatched_key()
     {
         $this->setStrategy('exceptions');
@@ -36,14 +37,14 @@ class ErrorHandlingStrategiesTest extends TestCase
         $this->build('bar:1', $model);
     }
 
-    /** @test */
+    #[Test]
     public function all_results_strategy_returns_an_unmodified_query_builder()
     {
         $this->setStrategy('all-results');
         $this->assertSqlEquals('parser error in in', 'select * from products');
     }
 
-    /** @test */
+    #[Test]
     public function no_results_strategy_returns_a_query_builder_with_a_limit_of_zero()
     {
         $this->setStrategy('no-results');

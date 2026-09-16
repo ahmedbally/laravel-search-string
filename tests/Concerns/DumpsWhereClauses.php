@@ -19,7 +19,7 @@ trait DumpsWhereClauses
             $query = $query->getQuery();
         }
 
-        return collect($query->wheres)->mapWithKeys(function ($where, $i){
+        return collect($query->wheres)->mapWithKeys(function ($where, $i) use ($query) {
             $where = (object) $where;
             $key = "$where->type[{$where->boolean}][$i]";
 
@@ -29,7 +29,7 @@ trait DumpsWhereClauses
             }
 
             $column = $where->column instanceof Expression
-                ? $where->column->getValue(new MySqlGrammar())
+                ? $where->column->getValue($query->getGrammar())
                 : $where->column;
 
             $value = $where->value ?? $where->values ?? null;

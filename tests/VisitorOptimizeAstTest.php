@@ -12,6 +12,8 @@ use Lorisleiva\LaravelSearchString\Visitors\IdentifyRelationshipsFromRulesVisito
 use Lorisleiva\LaravelSearchString\Visitors\InlineDumpVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\OptimizeAstVisitor;
 use Lorisleiva\LaravelSearchString\Visitors\RemoveNotSymbolVisitor;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @see OptimizeAstVisitor
@@ -29,7 +31,7 @@ class VisitorOptimizeAstTest extends VisitorTest
         ];
     }
 
-    public function success()
+    public static function success()
     {
         return [
             // Flatten And/Or.
@@ -98,12 +100,8 @@ class VisitorOptimizeAstTest extends VisitorTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider success
-     * @param $input
-     * @param $expected
-     */
+    #[Test]
+    #[DataProvider('success')]
     public function visitor_optimize_ast_success($input, $expected)
     {
         $this->assertAstEquals($input, $expected);

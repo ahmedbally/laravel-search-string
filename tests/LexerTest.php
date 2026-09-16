@@ -2,9 +2,12 @@
 
 namespace Lorisleiva\LaravelSearchString\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+
 class LexerTest extends TestCase
 {
-    public function success()
+    public static function success()
     {
         return [
             // Strings.
@@ -63,12 +66,8 @@ class LexerTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider success
-     * @param $input
-     * @param $expectedTokens
-     */
+    #[Test]
+    #[DataProvider('success')]
     public function lexer_success($input, $expectedTokens)
     {
         $tokens = $this->lex($input)->map->token->all();

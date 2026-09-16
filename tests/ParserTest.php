@@ -4,6 +4,8 @@ namespace Lorisleiva\LaravelSearchString\Tests;
 
 use Lorisleiva\LaravelSearchString\Exceptions\InvalidSearchStringException;
 use Lorisleiva\LaravelSearchString\Visitors\InlineDumpVisitor;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class ParserTest extends VisitorTest
 {
@@ -14,7 +16,7 @@ class ParserTest extends VisitorTest
         ];
     }
 
-    public function success()
+    public static function success()
     {
         return [
             // Assignments.
@@ -110,7 +112,7 @@ class ParserTest extends VisitorTest
         ];
     }
 
-    public function failure()
+    public static function failure()
     {
         return [
             // Unfinished.
@@ -148,23 +150,15 @@ class ParserTest extends VisitorTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider success
-     * @param $input
-     * @param $expected
-     */
+    #[Test]
+    #[DataProvider('success')]
     public function parser_success($input, $expected)
     {
         $this->assertAstEquals($input, $expected);
     }
 
-    /**
-     * @test
-     * @dataProvider failure
-     * @param $input
-     * @param $unexpectedToken
-     */
+    #[Test]
+    #[DataProvider('failure')]
     public function parser_failure($input, $unexpectedToken)
     {
         try {
