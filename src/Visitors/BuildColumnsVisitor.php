@@ -143,7 +143,7 @@ class BuildColumnsVisitor extends Visitor
             return $this->builder->where($where[0], $where[1], $where[2], $this->boolean);
         }
 
-        return $this->builder->where($wheres->toArray(), null, null, $this->boolean);
+        return $this->buildNestedWheres($wheres->toArray());
     }
 
     protected function buildSearchWhereClause(SoloSymbol $solo, $column): array
@@ -219,10 +219,22 @@ class BuildColumnsVisitor extends Visitor
         $column = $rule->qualifyColumn($this->builder);
         $exclude = in_array($query->operator, ['!=', 'not in']);
 
-        return $this->builder->where([
+        return $this->buildNestedWheres([
             [$column, ($exclude ? '<' : '>='), $start, $this->boolean],
             [$column, ($exclude ? '>' : '<='), $end, $this->boolean],
-        ], null, null, $this->boolean);
+        ]);
+    }
+
+    protected function buildNestedWheres(array $wheres)
+    {
+        // Laravel 11.x+ passes `boolean:` by name to array wheres, which clashes with our per-where booleans.
+        $callback = function ($nestedBuilder) use ($wheres) {
+            foreach ($wheres as $where) {
+                $nestedBuilder->where(...$where);
+            }
+        };
+
+        return $this->builder->where($callback, null, null, $this->boolean);
     }
 
     protected function buildBasicQuery(QuerySymbol $query, ColumnRule $rule)

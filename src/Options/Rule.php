@@ -56,7 +56,7 @@ abstract class Rule
     protected function isRegularExpression($pattern)
     {
         try {
-            preg_match($pattern, null);
+            preg_match($pattern, '');
 
             return preg_last_error() === PREG_NO_ERROR;
         } catch (\Throwable $exception) {
